@@ -1,26 +1,6 @@
 {
-  "builds": [
-    {
-      "src": "api/**/*.php",
-      "use": "@vercel/php"
-    },
-    {
-      "src": "public/**",
-      "use": "@vercel/static"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(css|js|images)/(.*)",
-      "dest": "/public/$1/$2"
-    },
-    {
-      "src": "/",
-      "dest": "/api/index.php"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/api/$1"
-    }
+  "rewrites": [
+    { "source": "/", "destination": "/api/index.php" },
+    { "source": "/(.*)", "destination": "/api/$1" }
   ]
 }
