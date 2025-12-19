@@ -1,0 +1,23 @@
+# Environment variables
+.env
+.env.local
+
+# Vercel
+.vercel
+
+# PHP sessions
+api/sessions/
+
+# Uploads (if storing locally)
+api/uploads/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
