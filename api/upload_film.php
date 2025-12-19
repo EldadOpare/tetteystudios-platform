@@ -144,7 +144,7 @@ try {
 <head>
     <meta charset="UTF-8">
     <title>Upload Film - TetteyStudios+</title>
-    <link rel="stylesheet" href="/public/css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
     <style>
         .step-container {
             display: none;

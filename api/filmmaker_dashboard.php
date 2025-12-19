@@ -13,7 +13,7 @@ if ($_SESSION['role'] !== 'filmmaker' && $_SESSION['role'] !== 'admin') {
 <head>
     <meta charset="UTF-8">
     <title>Filmmaker Dashboard - TetteyStudios+</title>
-    <link rel="stylesheet" href="/public/css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>

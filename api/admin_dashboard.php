@@ -55,7 +55,7 @@ $allFilms = $supabase->request('GET', 'films', [
 <head>
     <meta charset="UTF-8">
     <title>Admin Dashboard - TetteyStudios+</title>
-    <link rel="stylesheet" href="/public/css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
