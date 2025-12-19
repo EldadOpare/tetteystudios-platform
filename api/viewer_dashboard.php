@@ -18,7 +18,7 @@ if ($_SESSION['role'] !== 'viewer' && $_SESSION['role'] !== 'admin') {
 <head>
     <meta charset="UTF-8">
     <title>Viewer Dashboard - TetteyStudios+</title>
-    <link rel="stylesheet" href="../public/css/style.css">
+    <link rel="stylesheet" href="/public/css/style.css">
 </head>
 
 <body>
@@ -241,7 +241,7 @@ if ($_SESSION['role'] !== 'viewer' && $_SESSION['role'] !== 'admin') {
         </section>
     </main>
 
-    <script src="../public/js/script.js"></script>
+    <script src="/public/js/script.js"></script>
     </main>
 </body>
 

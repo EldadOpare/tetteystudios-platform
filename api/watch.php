@@ -150,7 +150,7 @@ $isExternalVideo = !empty($embedUrl) && (strpos($embedUrl, 'youtube.com/embed') 
 <head>
     <meta charset="UTF-8">
     <title><?= htmlspecialchars($film['title']) ?> - TetteyStudios+</title>
-    <link rel="stylesheet" href="../public/css/style.css">
+    <link rel="stylesheet" href="/public/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700&display=swap"
         rel="stylesheet">
     <style>

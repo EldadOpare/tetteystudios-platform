@@ -13,7 +13,7 @@ if ($_SESSION['role'] !== 'filmmaker' && $_SESSION['role'] !== 'admin') {
 <head>
     <meta charset="UTF-8">
     <title>Filmmaker Dashboard - TetteyStudios+</title>
-    <link rel="stylesheet" href="../public/css/style.css">
+    <link rel="stylesheet" href="/public/css/style.css">
 </head>
 
 <body>
@@ -193,7 +193,7 @@ if ($_SESSION['role'] !== 'filmmaker' && $_SESSION['role'] !== 'admin') {
         </section>
 
     </main>
-    <script src="../public/js/script.js"></script>
+    <script src="/public/js/script.js"></script>
 </body>
 
 </html>
