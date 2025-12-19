@@ -71,7 +71,7 @@ $allFilms = $supabase->request('GET', 'films', [
         <!-- Hero Section with Playing Video -->
         <section class="hero" style="margin-top: 0;">
             <div class="hero-video-container">
-                <img id="hero-cover" src="assets/images/circles_cover.png" alt="Cover"
+                <img id="hero-cover" src="/public/images/circles_cover.png" alt="Cover"
                     style="opacity: 0; transition: opacity 1s;">
                 <video id="hero-video" muted playsinline autoplay preload="auto"
                     style="opacity: 1; transition: opacity 1s;" webkit-playsinline>
@@ -80,9 +80,9 @@ $allFilms = $supabase->request('GET', 'films', [
                 <script>
                     (function () {
                         const playlist = [
-                            'assets/videos/1917_trailer.mp4',
-                            'assets/videos/thunderbolts_trailer.mp4',
-                            'assets/videos/circles_trailer.mp4'
+                            '/public/videos/1917_trailer.mp4',
+                            '/public/videos/thunderbolts_trailer.mp4',
+                            '/public/videos/circles_trailer.mp4'
                         ];
                         let currentIndex = 0;
                         const video = document.getElementById('hero-video');

@@ -30,7 +30,7 @@ if ($_SESSION['role'] !== 'filmmaker' && $_SESSION['role'] !== 'admin') {
         <!-- Section with Playing Video -->
         <section class="hero" style="margin-top: 0;">
             <div class="hero-video-container">
-                <img id="hero-cover" src="assets/images/circles_cover.png" alt="Cover"
+                <img id="hero-cover" src="/public/images/circles_cover.png" alt="Cover"
                     style="opacity: 0; transition: opacity 1s;">
                 <video id="hero-video" muted playsinline autoplay preload="auto"
                     style="opacity: 1; transition: opacity 1s;" webkit-playsinline>
@@ -109,7 +109,7 @@ if ($_SESSION['role'] !== 'filmmaker' && $_SESSION['role'] !== 'admin') {
                         ?>
                         <div class="card" style="height: auto; cursor: default; background: #111; border: 1px solid #333;">
                             <div style="position: relative;">
-                                <img src="<?= htmlspecialchars($film['poster_url'] ?: 'assets/images/thumb1.png') ?>"
+                                <img src="<?= htmlspecialchars($film['poster_url'] ?: '/public/images/thumb1.png') ?>"
                                     class="card-img" style="height: 180px; object-fit: cover; opacity: 0.8;">
                                 <div
                                     style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.8); padding: 4px 8px; border-radius: 4px; font-size: 11px; text-transform: uppercase; font-weight: bold; color: <?= $film['status'] == 'approved' ? '#34c759' : '#ffcc00' ?>">
@@ -176,7 +176,7 @@ if ($_SESSION['role'] !== 'filmmaker' && $_SESSION['role'] !== 'admin') {
                 <?php if (!empty($films)): ?>
                     <?php foreach ($films as $film): ?>
                         <div class="card" onclick="window.location.href='watch.php?id=<?= $film['id'] ?>'">
-                            <img src="<?= htmlspecialchars($film['poster_url'] ?: $film['thumbnail_url'] ?: 'assets/images/circles_cover.png') ?>"
+                            <img src="<?= htmlspecialchars($film['poster_url'] ?: $film['thumbnail_url'] ?: '/public/images/circles_cover.png') ?>"
                                 alt="<?= htmlspecialchars($film['title']) ?>" class="card-img">
                             <div class="card-overlay">
                                 <div class="card-title"><?= htmlspecialchars($film['title']) ?></div>

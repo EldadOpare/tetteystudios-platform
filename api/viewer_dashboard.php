@@ -34,7 +34,7 @@ if ($_SESSION['role'] !== 'viewer' && $_SESSION['role'] !== 'admin') {
         <!-- Section with Default Carousel -->
         <section class="hero" style="margin-top: 0;">
             <div class="hero-video-container">
-                <img id="hero-cover" src="assets/images/circles_cover.png" alt="Cover"
+                <img id="hero-cover" src="/public/images/circles_cover.png" alt="Cover"
                     style="opacity: 0; transition: opacity 1s;">
                 <video id="hero-video" muted playsinline autoplay preload="auto"
                     style="opacity: 1; transition: opacity 1s;" webkit-playsinline>
@@ -116,7 +116,7 @@ if ($_SESSION['role'] !== 'viewer' && $_SESSION['role'] !== 'admin') {
             </div>
             <div class="scroll-container">
                 <div class="card" style="cursor: pointer;" onclick="document.getElementById('hero-video')?.play()">
-                    <img src="assets/images/circles_cover.png" alt="Featured Trailer" class="card-img">
+                    <img src="/public/images/circles_cover.png" alt="Featured Trailer" class="card-img">
                     <div class="card-overlay">
                         <div class="card-title">Featured Content</div>
                         <div class="card-subtitle">TetteyStudios+ Original</div>
@@ -124,7 +124,7 @@ if ($_SESSION['role'] !== 'viewer' && $_SESSION['role'] !== 'admin') {
                 </div>
                 <?php foreach (array_slice($films, 0, 5) as $film): ?>
                         <div class="card" onclick="window.location.href='watch.php?id=<?= $film['id'] ?>'">
-                        <img src="<?= htmlspecialchars($film['poster_url'] ?: $film['thumbnail_url'] ?: 'assets/images/circles_cover.png') ?>"
+                        <img src="<?= htmlspecialchars($film['poster_url'] ?: $film['thumbnail_url'] ?: '/public/images/circles_cover.png') ?>"
                             class="card-img">
                         <div class="card-overlay">
                             <div class="card-title"><?= htmlspecialchars($film['title']) ?></div>
@@ -147,7 +147,7 @@ if ($_SESSION['role'] !== 'viewer' && $_SESSION['role'] !== 'admin') {
                 <?php if (!empty($films)): ?>
                     <?php foreach ($films as $film): ?>
                         <div class="card" onclick="window.location.href='watch.php?id=<?= $film['id'] ?>'">
-                            <img src="<?= htmlspecialchars($film['thumbnail_url'] ?: $film['poster_url'] ?: 'assets/images/circles_cover.png') ?>"
+                            <img src="<?= htmlspecialchars($film['thumbnail_url'] ?: $film['poster_url'] ?: '/public/images/circles_cover.png') ?>"
                                 alt="<?= htmlspecialchars($film['title']) ?>" class="card-img">
                             <div class="card-overlay">
                                 <div class="card-title"><?= htmlspecialchars($film['title']) ?></div>
@@ -177,7 +177,7 @@ if ($_SESSION['role'] !== 'viewer' && $_SESSION['role'] !== 'admin') {
 
             $myDonations = array_map(function ($d) {
                 $d['title'] = $d['films']['title'] ?? 'Unknown Film';
-                $d['thumbnail'] = $d['films']['thumbnail_url'] ?? 'assets/images/circles_cover.png';
+                $d['thumbnail'] = $d['films']['thumbnail_url'] ?? '/public/images/circles_cover.png';
                 return $d;
             }, $donationsRaw);
 
@@ -216,7 +216,7 @@ if ($_SESSION['role'] !== 'viewer' && $_SESSION['role'] !== 'admin') {
                 <div class="scroll-container">
                     <?php foreach ($history as $film): ?>
                         <div class="card" onclick="window.location.href='watch.php?id=<?= $film['id'] ?>'">
-                            <img src="<?= htmlspecialchars($film['thumbnail_url'] ?: $film['poster_url'] ?: 'assets/images/circles_cover.png') ?>"
+                            <img src="<?= htmlspecialchars($film['thumbnail_url'] ?: $film['poster_url'] ?: '/public/images/circles_cover.png') ?>"
                                 class="card-img">
                             <div class="card-overlay">
                                 <div class="card-title"><?= htmlspecialchars($film['title']) ?></div>
