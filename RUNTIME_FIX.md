@@ -1,29 +1,30 @@
-# ✅ Runtime Error Fixed!
+# ✅ Vercel Configuration Fixed!
 
 ## Issue Resolved
-The deprecated `vercel-php` runtime errors have been fixed.
+All builder and runtime errors have been fixed using Vercel's modern auto-detection.
 
 ## What Changed
-- **Old:** Custom `vercel-php` runtime (deprecated)
-- **New:** Official `@vercel/php` builder (stable & maintained)
+- **Old:** Custom builders and runtimes (all deprecated)
+- **New:** Simple rewrites + auto-detection (Vercel handles PHP automatically)
 
 ## Latest Configuration
-The `vercel.json` now uses Vercel's official PHP builder:
+The `vercel.json` is now minimal and lets Vercel auto-detect PHP:
 ```json
 {
-  "builds": [
-    {
-      "src": "api/**/*.php",
-      "use": "@vercel/php"
-    }
+  "rewrites": [
+    { "source": "/", "destination": "/api/index.php" },
+    { "source": "/(.*)", "destination": "/api/$1" }
   ]
 }
 ```
 
+**How it works:**
+- Vercel automatically detects `.php` files in your repo
+- No builders or runtimes needed
+- Clean, simple, and always up-to-date
+
 ## Status
 ✅ **Fixed and pushed to GitHub**
-
-The latest code on GitHub now uses the official Vercel PHP builder.
 
 ## Next Steps
 Your Vercel deployment should now work! Just:
@@ -33,9 +34,9 @@ Your Vercel deployment should now work! Just:
 
    OR
 
-3. Delete the project and re-import from GitHub (it will use the latest code automatically)
+3. Delete the project and re-import from GitHub (recommended for clean start)
 
 ---
 
 **GitHub Repo:** https://github.com/EldadOpare/tetteystudios-platform
-**Latest Commit:** Uses @vercel/php builder (official & stable)
+**Latest Commit:** Simplified config with auto-detection
