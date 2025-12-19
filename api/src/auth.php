@@ -1,11 +1,6 @@
 <?php
-$sessionDir = __DIR__ . '/../sessions';
-if (!is_dir($sessionDir)) {
-    mkdir($sessionDir, 0777, true);
-}
-session_save_path($sessionDir);
+// Remove custom session directory logic for serverless compatibility
 session_start();
-// Using absolute path for db.php relative to this file to be safe
 require_once __DIR__ . '/db.php';
 
 function isLoggedIn()
@@ -49,7 +44,6 @@ function register($username, $email, $password, $role)
         }
 
         $userId = $users[0]['id'];
-
 
         $supabase->request('POST', 'user_profiles', [
             'user_id' => $userId,
@@ -97,7 +91,6 @@ function login($username, $password)
                 }
 
                 $_SESSION['role'] = $profile['role'] ?? 'viewer';
-
                 return ['success' => true, 'message' => 'Login successful', 'role' => $_SESSION['role']];
             }
         }
