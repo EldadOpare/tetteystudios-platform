@@ -1,25 +1,4 @@
 {
-  "rewrites": [
-    { "source": "/", "destination": "/api/index" },
-    { "source": "/login", "destination": "/api/login" },
-    { "source": "/signup", "destination": "/api/signup" },
-    { "source": "/logout", "destination": "/api/logout" },
-    { "source": "/watch", "destination": "/api/watch" },
-    { "source": "/filmmaker_dashboard", "destination": "/api/filmmaker_dashboard" },
-    { "source": "/viewer_dashboard", "destination": "/api/viewer_dashboard" },
-    { "source": "/admin_dashboard", "destination": "/api/admin_dashboard" },
-    { "source": "/upload_film", "destination": "/api/upload_film" },
-    { "source": "/(.*)", "destination": "/api/$1" }
-  ],
-  "headers": [
-    {
-      "source": "/api/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=0, must-revalidate"
-        }
-      ]
-    }
-  ]
+  "cleanUrls": true,
+  "trailingSlash": false
 }
