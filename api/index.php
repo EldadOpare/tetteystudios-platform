@@ -110,7 +110,7 @@ try {
             <section class="hero">
                 <div class="hero-video-container">
                     <img id="hero-cover"
-                        src="<?= htmlspecialchars($featuredFilm['poster_url'] ?: '/public/images/circles_cover.png') ?>"
+                        src="<?= htmlspecialchars($featuredFilm['poster_url'] ?: '/images/circles_cover.png') ?>"
                         alt="Cover" style="opacity: 0; transition: opacity 1s;">
 
                     <!-- Video - Always show hero video as background -->
@@ -170,7 +170,7 @@ try {
                 <div class="hero-video-container">
                     <!-- Default Cover Image (Hidden, video plays immediately) -->
                     <img id="hero-cover"
-                        src="/public/images/circles_cover.png"
+                        src="/images/circles_cover.png"
                         alt="Cover" style="opacity: 0; transition: opacity 1s;">
                     
                     <!-- Default Video - Always playing -->
@@ -226,7 +226,7 @@ try {
             <div class="scroll-container">
                 <!-- Default trailer cards using assets -->
                 <div class="card" style="cursor: pointer;" onclick="document.getElementById('hero-video')?.play()">
-                    <img src="/public/images/circles_cover.png" alt="Featured Trailer" class="card-img">
+                    <img src="/images/circles_cover.png" alt="Featured Trailer" class="card-img">
                     <div class="card-overlay">
                         <div class="card-title">Featured Content</div>
                         <div class="card-subtitle">TetteyStudios+ Original</div>
@@ -236,7 +236,7 @@ try {
                 <!-- Show approved films if available -->
                 <?php foreach ($films as $film): ?>
                     <div class="card" onclick="window.location.href='watch.php?id=<?= $film['id'] ?>'">
-                        <img src="<?= htmlspecialchars($film['thumbnail_url'] ?: $film['poster_url'] ?: '/public/images/circles_cover.png') ?>"
+                        <img src="<?= htmlspecialchars($film['thumbnail_url'] ?: $film['poster_url'] ?: '/images/circles_cover.png') ?>"
                             alt="<?= htmlspecialchars($film['title']) ?>" class="card-img">
                         <div class="card-overlay">
                             <div class="card-title"><?= htmlspecialchars($film['title']) ?></div>
@@ -262,7 +262,7 @@ try {
                 <?php if (!empty($films)): ?>
                     <?php foreach ($films as $film): ?>
                         <div class="card" onclick="window.location.href='watch.php?id=<?= $film['id'] ?>'">
-                            <img src="<?= htmlspecialchars($film['thumbnail_url'] ?: $film['poster_url'] ?: '/public/images/circles_cover.png') ?>"
+                            <img src="<?= htmlspecialchars($film['thumbnail_url'] ?: $film['poster_url'] ?: '/images/circles_cover.png') ?>"
                                 alt="<?= htmlspecialchars($film['title']) ?>" class="card-img">
                             <div class="card-overlay">
                                 <div class="card-title"><?= htmlspecialchars($film['title']) ?></div>
@@ -306,7 +306,7 @@ try {
 
     </main>
 
-    <script src="/public/js/script.js"></script>
+    <script src="/js/script.js"></script>
 </body>
 
 </html>
