@@ -77,8 +77,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             try {
                 $posterUrl = handleUpload('poster');
-                // Trailer is now a link, handled above
                 $thumbnailUrl = handleUpload('thumbnail');
+                // Fallback to default image if upload fails or not provided
+                if (!$posterUrl) {
+                    $posterUrl = '/images/circles_cover.png';
+                }
+                if (!$thumbnailUrl) {
+                    $thumbnailUrl = '/images/circles_cover.png';
+                }
             } catch (Exception $uploadError) {
                 throw new Exception("Upload error: " . $uploadError->getMessage());
             }
@@ -122,8 +128,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             $success = "Film uploaded successfully! It is now pending approval.";
-            header("refresh:2;url=filmmaker_dashboard.php");
-
+            header("Location: filmmaker_dashboard.php");
+            exit;
         } catch (Exception $e) {
             $error = "Upload failed: " . $e->getMessage();
         }
