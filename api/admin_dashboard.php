@@ -7,14 +7,14 @@ requireLogin();
 if ($_SESSION['role'] === 'admin') {
     // OK
 } elseif ($_SESSION['role'] === 'filmmaker') {
-    header('Location: filmmaker_dashboard.php');
+    header('Location: /filmmaker_dashboard.php');
     exit;
 } elseif ($_SESSION['role'] === 'viewer') {
-    header('Location: viewer_dashboard.php');
+    header('Location: /viewer_dashboard.php');
     exit;
 } else {
     session_destroy();
-    header('Location: login.php');
+    header('Location: /login.php');
     exit;
 }
 
