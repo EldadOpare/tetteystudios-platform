@@ -4,15 +4,22 @@ require_once __DIR__ . '/src/auth.php';
 
 if (isLoggedIn()) {
     // Redirect to correct dashboard if already logged in
-    $role = $_SESSION['role'] ?? 'viewer';
+    $role = $_SESSION['role'] ?? null;
     if ($role === 'filmmaker') {
         header('Location: filmmaker_dashboard.php');
+        exit;
     } elseif ($role === 'admin') {
         header('Location: admin_dashboard.php');
-    } else {
+        exit;
+    } elseif ($role === 'viewer') {
         header('Location: viewer_dashboard.php');
+        exit;
+    } else {
+        // Invalid session, destroy and show login
+        session_destroy();
+        header('Location: login.php');
+        exit;
     }
-    exit;
 }
 
 $error = '';
@@ -27,15 +34,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $result = login($username, $password);
         if ($result['success']) {
-            $role = $_SESSION['role'] ?? 'viewer';
+            $role = $_SESSION['role'] ?? null;
             if ($role === 'filmmaker') {
                 header('Location: filmmaker_dashboard.php');
+                exit;
             } elseif ($role === 'admin') {
                 header('Location: admin_dashboard.php');
-            } else {
+                exit;
+            } elseif ($role === 'viewer') {
                 header('Location: viewer_dashboard.php');
+                exit;
+            } else {
+                // Invalid session, destroy and show login
+                session_destroy();
+                header('Location: login.php');
+                exit;
             }
-            exit;
         } else {
             $error = $result['message'];
         }
