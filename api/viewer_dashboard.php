@@ -2,14 +2,15 @@
 session_start();
 require_once __DIR__ . '/src/auth.php';
 requireLogin();
-
-
-if ($_SESSION['role'] !== 'viewer' && $_SESSION['role'] !== 'admin') {
-    // If filmmaker tries to access viewer dashboard let them
-    if ($_SESSION['role'] === 'filmmaker') {
-        header('Location: filmmaker_dashboard.php');
-        exit;
-    }
+if ($_SESSION['role'] === 'viewer' || $_SESSION['role'] === 'admin') {
+    // OK
+} elseif ($_SESSION['role'] === 'filmmaker') {
+    header('Location: filmmaker_dashboard.php');
+    exit;
+} else {
+    session_destroy();
+    header('Location: login.php');
+    exit;
 }
 ?>
 

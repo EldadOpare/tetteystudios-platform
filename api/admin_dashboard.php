@@ -1,7 +1,22 @@
 <?php
 session_start();
-require_once __DIR__ . '/src/auth.php';//makes sure user is logged in
+require_once __DIR__ . '/src/auth.php';
 requireLogin();
+
+// Hardened access control
+if ($_SESSION['role'] === 'admin') {
+    // OK
+} elseif ($_SESSION['role'] === 'filmmaker') {
+    header('Location: filmmaker_dashboard.php');
+    exit;
+} elseif ($_SESSION['role'] === 'viewer') {
+    header('Location: viewer_dashboard.php');
+    exit;
+} else {
+    session_destroy();
+    header('Location: login.php');
+    exit;
+}
 
 // stops regular users from accessing admin dashboard
 if ($_SESSION['role'] !== 'admin') {
