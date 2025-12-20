@@ -56,6 +56,13 @@ try {
     $featuredFilm = null;
 
 }
+
+$thumbnail_map = [
+    'Echoes Of Starr' => 'https://qqwwtartsqtxyoirsiio.supabase.co/storage/v1/object/public/uploads/thumbnails/thumbnail_693c451c649fe.png',
+    'Circles' => 'https://qqwwtartsqtxyoirsiio.supabase.co/storage/v1/object/public/uploads/thumbnails/thumbnail_693da20b8aa13.jpeg',
+    '1917' => 'https://qqwwtartsqtxyoirsiio.supabase.co/storage/v1/object/public/uploads/thumbnails/thumbnail_693da350a7e08.jpeg',
+    'Thunderbolts' => 'https://qqwwtartsqtxyoirsiio.supabase.co/storage/v1/object/public/uploads/thumbnails/thumbnail_693df12f45818.jpeg',
+];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -236,7 +243,10 @@ try {
                 <!-- Show approved films if available -->
                 <?php foreach ($films as $film): ?>
                     <div class="card" onclick="window.location.href='watch.php?id=<?= $film['id'] ?>'">
-                        <img src="<?= htmlspecialchars($film['thumbnail_url'] ?: $film['poster_url'] ?: '/images/circles_cover.png') ?>"
+                        <?php
+                        $img_url = $film['thumbnail_url'] ?: $film['poster_url'] ?: ($thumbnail_map[$film['title']] ?? '/images/circles_cover.png');
+                        ?>
+                        <img src="<?= htmlspecialchars($img_url) ?>"
                             alt="<?= htmlspecialchars($film['title']) ?>" class="card-img">
                         <div class="card-overlay">
                             <div class="card-title"><?= htmlspecialchars($film['title']) ?></div>
@@ -262,7 +272,10 @@ try {
                 <?php if (!empty($films)): ?>
                     <?php foreach ($films as $film): ?>
                         <div class="card" onclick="window.location.href='watch.php?id=<?= $film['id'] ?>'">
-                            <img src="<?= htmlspecialchars($film['thumbnail_url'] ?: $film['poster_url'] ?: '/images/circles_cover.png') ?>"
+                            <?php
+                            $img_url = $film['thumbnail_url'] ?: $film['poster_url'] ?: ($thumbnail_map[$film['title']] ?? '/images/circles_cover.png');
+                            ?>
+                            <img src="<?= htmlspecialchars($img_url) ?>"
                                 alt="<?= htmlspecialchars($film['title']) ?>" class="card-img">
                             <div class="card-overlay">
                                 <div class="card-title"><?= htmlspecialchars($film['title']) ?></div>
