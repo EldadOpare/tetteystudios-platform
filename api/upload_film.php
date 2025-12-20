@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             function handleUpload($fileKey, $maxSizeMB = 100)
             {
-                global $supabase;
+                global $supabaseStorage;
 
                 if (!isset($_FILES[$fileKey]) || $_FILES[$fileKey]['error'] !== UPLOAD_ERR_OK) {
                     return null;
@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $filename = uniqid($fileKey . '_') . '.' . $ext;
 
                 try {
-                    return $supabase->uploadFile('uploads', $filename, $_FILES[$fileKey]['tmp_name'], $mimeType);
+                    return $supabaseStorage->uploadFile('uploads', $filename, $_FILES[$fileKey]['tmp_name'], $mimeType);
                 } catch (Exception $e) {
                     throw new Exception("Storage Error: " . $e->getMessage());
                 }
