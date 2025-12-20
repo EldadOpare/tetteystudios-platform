@@ -6,20 +6,20 @@ if (isLoggedIn()) {
     // Redirect to correct dashboard if already logged in
     $role = $_SESSION['role'] ?? null;
     if ($role === 'filmmaker') {
-        header('Location: /filmmaker_dashboard.php');
+        header('Location: /api/filmmaker_dashboard.php');
         exit;
     } elseif ($role === 'admin') {
-        header('Location: /admin_dashboard.php');
+        header('Location: /api/admin_dashboard.php');
         exit;
     } elseif ($role === 'viewer') {
-        header('Location: /viewer_dashboard.php');
+        header('Location: /api/viewer_dashboard.php');
         exit;
     } else {
         // Invalid session, destroy and show login
         session_destroy();
         // Prevent redirect loop: only redirect if not already on login.php
         if (basename($_SERVER['PHP_SELF']) !== 'login.php') {
-            header('Location: /login.php');
+            header('Location: /api/login.php');
         }
         exit;
     }
@@ -39,20 +39,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($result['success']) {
             $role = $_SESSION['role'] ?? null;
             if ($role === 'filmmaker') {
-                header('Location: /filmmaker_dashboard.php');
+                header('Location: /api/filmmaker_dashboard.php');
                 exit;
             } elseif ($role === 'admin') {
-                header('Location: /admin_dashboard.php');
+                header('Location: /api/admin_dashboard.php');
                 exit;
             } elseif ($role === 'viewer') {
-                header('Location: /viewer_dashboard.php');
+                header('Location: /api/viewer_dashboard.php');
                 exit;
             } else {
                 // Invalid session, destroy and show login
                 session_destroy();
                 // Prevent redirect loop: only redirect if not already on login.php
                 if (basename($_SERVER['PHP_SELF']) !== 'login.php') {
-                    header('Location: /login.php');
+                    header('Location: /api/login.php');
                 }
                 exit;
             }
