@@ -23,7 +23,8 @@ if ($_SESSION['role'] !== 'admin') {
     die("Access Denied. Admins only.");
 }
 
-$message = ''; // Variable to store success or error messages for the UI
+// Variable to store success or error messages for the UI
+$message = ''; 
 
 // Runs when an admin clicks Approve or Reject
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -31,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? null;
 
     if ($filmId && $action) {
-        //decides whether to approve or reject based on the action
+   
         $newStatus = ($action === 'approve') ? 'approved' : 'rejected';
 
         try {

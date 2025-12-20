@@ -2,14 +2,15 @@
 require_once __DIR__ . '/src/session_init.php';
 require_once __DIR__ . '/src/auth.php';
 
-// Get Film ID
+
+
 $filmId = $_GET['id'] ?? null;
 if (!$filmId) {
     die("Film not specified.");
 }
 
 
-// Fetch Film Data
+
 $response = $supabase->request('GET', 'films', [
     'id' => "eq.$filmId",
     'select' => '*,users(username,email),categories(name)'
@@ -23,7 +24,9 @@ $film['filmmaker_name'] = $film['users']['username'] ?? 'Unknown';
 $film['filmmaker_contact'] = $film['users']['email'] ?? '';
 $film['category_name'] = $film['categories']['name'] ?? 'Uncategorized';
 
-// Handle Donation
+
+
+
 $donationMsg = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['donate_amount'])) {
     if (!isLoggedIn()) {
@@ -31,12 +34,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['donate_amount'])) {
         exit;
     }
 
-    // Donation Handling
+  
     $amount = (float) $_POST['donate_amount'];
     $message = $_POST['donate_message'] ?? '';
 
     try {
-        // Record Donation
+        
+        
         $supabase->request('POST', 'donations', [
             'user_id' => $_SESSION['user_id'],
             'film_id' => $filmId,
@@ -44,7 +48,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['donate_amount'])) {
             'message' => $message
         ]);
 
-        // Update Film Funding (Read-Modify-Write)
+       
+
         $newRaised = $film['funding_raised'] + $amount;
         $supabase->request('PATCH', "films?id=eq.$filmId", [
             'funding_raised' => $newRaised
@@ -52,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['donate_amount'])) {
 
         $donationMsg = "Thank you for your donation of $$amount!";
 
-        // Update local object
+        
         $film['funding_raised'] = $newRaised;
 
     } catch (Exception $e) {
@@ -60,7 +65,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['donate_amount'])) {
     }
 }
 
-// Handle Review
+
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rating'])) {
     if (!isLoggedIn()) {
         header('Location: login.php');
@@ -77,13 +83,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rating'])) {
             'rating' => $rating,
             'comment' => $comment
         ]);
-    } catch (Exception $e) {
-        // Ignore duplicate
+    } 
+    catch (Exception $e) {
+        
+
     }
 }
 
 
-// Fetch Reviews
+
 $reviewsRaw = $supabase->request('GET', 'reviews', [
     'film_id' => "eq.$filmId",
     'select' => '*,users(username)',
@@ -95,17 +103,19 @@ $filmReviews = array_map(function ($r) {
     return $r;
 }, $reviewsRaw);
 
-// Calculate Average Rating
+
+
 $avgRating = 0;
 if (count($filmReviews) > 0) {
     $sum = array_reduce($filmReviews, fn($carry, $item) => $carry + $item['rating'], 0);
     $avgRating = round($sum / count($filmReviews), 1);
 }
 
-// Fetch Cast/Crew (Credits)
+
 $filmCredits = $supabase->request('GET', 'film_credits', ['film_id' => "eq.$filmId"]);
 
-// Fetch Recent Donors
+
+
 $recentDonorsRaw = $supabase->request('GET', 'donations', [
     'film_id' => "eq.$filmId",
     'select' => '*,users(username)',
@@ -118,26 +128,28 @@ $recentDonors = array_map(function ($d) {
     return $d;
 }, $recentDonorsRaw);
 
-// Function to convert video URLs to embeddable format
+
+
 function getEmbedUrl($url)
 {
-    // If there is no URL, stop early.
+    
     if (empty($url))
         return null;
 
-    // this regular expression looks for the 11-character ID that identifies a YouTube video (found after ?v= or in youtu.be/ links).
+    
+    
     if (preg_match('/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/', $url, $matches)) {
-        // $matches[1] is the 11-character ID. We wrap it in the official embed link.
+       
         return 'https://www.youtube.com/embed/' . $matches[1];
     }
 
-    // Vimeo uses a string of numbers for its IDs.
+    
     if (preg_match('/vimeo\.com\/(?:.*\/)?(\d+)/', $url, $matches)) {
-        // $matches[1] is the ID. We wrap it in the official embed link.
+        
         return 'https://player.vimeo.com/video/' . $matches[1];
     }
 
-    // If it's already an embed URL or other format, return as is
+    
     return $url;
 }
 
@@ -442,7 +454,7 @@ $isExternalVideo = !empty($embedUrl) && (strpos($embedUrl, 'youtube.com/embed') 
             border-bottom: none;
         }
 
-        /* Mobile Responsive */
+        
         @media (max-width: 900px) {
             .film-content {
                 grid-template-columns: 1fr;
@@ -478,7 +490,7 @@ $isExternalVideo = !empty($embedUrl) && (strpos($embedUrl, 'youtube.com/embed') 
         </div>
     </header>
 
-    <!-- Cinema Player Section -->
+    
     <div class="player-container">
         <div class="video-wrapper">
             <?php if ($isExternalVideo && $embedUrl): ?>
@@ -488,13 +500,16 @@ $isExternalVideo = !empty($embedUrl) && (strpos($embedUrl, 'youtube.com/embed') 
                     allowfullscreen>
                 </iframe>
             <?php elseif ($film['video_url'] && strpos($film['video_url'], 'http') === 0): ?>
-                <!-- Direct Iframe Fallback -->
+              
+                
                 <iframe class="video-embed" src="<?= htmlspecialchars($film['video_url']) ?>"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowfullscreen>
                 </iframe>
             <?php else: ?>
-                <!-- Native Video -->
+                
+                
+
                 <video controls autoplay poster="<?= htmlspecialchars($film['poster_url'] ?? '') ?>">
                     <?php if ($film['video_url']): ?>
                         <source src="<?= htmlspecialchars($film['video_url']) ?>" type="video/mp4">
@@ -506,7 +521,8 @@ $isExternalVideo = !empty($embedUrl) && (strpos($embedUrl, 'youtube.com/embed') 
     </div>
 
     <main class="film-content">
-        <!-- Info & Content -->
+       
+    
         <div class="film-main">
             <div class="film-header">
                 <div class="film-meta">
@@ -530,7 +546,8 @@ $isExternalVideo = !empty($embedUrl) && (strpos($embedUrl, 'youtube.com/embed') 
                         <div class="name"><?= htmlspecialchars($c['name']) ?></div>
                     </div>
                 <?php endforeach; ?>
-                <!-- Fallback if no credits -->
+             
+                
                 <div class="credit-item">
                     <div class="role">Filmmaker</div>
                     <div class="name"><?= htmlspecialchars($film['filmmaker_name']) ?></div>
@@ -583,7 +600,7 @@ $isExternalVideo = !empty($embedUrl) && (strpos($embedUrl, 'youtube.com/embed') 
             </div>
         </div>
 
-        <!-- RIGHT: Sidebar (Funding) -->
+        
         <div class="film-sidebar">
             <div class="funding-card">
                 <?php if ($film['funding_goal'] > 0): ?>
@@ -641,7 +658,8 @@ $isExternalVideo = !empty($embedUrl) && (strpos($embedUrl, 'youtube.com/embed') 
                         <?php endif; ?>
                     </div>
                 <?php else: ?>
-                    <!-- No Funding Goal / Show Profile -->
+                   
+                    
                     <div class="funding-header">
                         <h3 class="section-title" style="margin-bottom: 5px;">Filmmaker</h3>
                     </div>

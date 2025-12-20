@@ -8,21 +8,21 @@ $search = $_GET['search'] ?? '';
 
 
 $queryParams = [
-    'select' => '*,categories(name),users(username)', // Get film data + category name + author name
-    'status' => 'eq.approved', // Film must be approved by admin
-    'visibility' => 'eq.public', // Film must be public
-    'order' => 'created_at.desc' // Show newest films first
+    'select' => '*,categories(name),users(username)',
+    'status' => 'eq.approved', 
+    'visibility' => 'eq.public', 
+    'order' => 'created_at.desc' 
 ];
 
 if ($category) {
-    // !inner ensures that if a film doesn't have this category, it is hidden entirely
+   
     $queryParams['select'] = '*,categories!inner(name),users(username)';
     $queryParams['categories.name'] = 'eq.' . $category;
 }
 
 if ($search) {
-    // The '*' acts as a wildcard (matches text before or after)
-    // the "or" logic finds it in the TITLE or the SYNOPSIS
+
+    
     $term = $search; 
     $pattern = "*$term*";
     $queryParams['or'] = "(title.ilike.$pattern,synopsis.ilike.$pattern)";
@@ -40,7 +40,7 @@ try {
         $filmsRaw = [];
     }
 
-    // Transform Films to match simpler structure expected by valid HTML below (flattener)
+
     $films = array_map(function ($f) {
         $f['category_name'] = $f['categories']['name'] ?? 'Uncategorized';
         $f['filmmaker_name'] = $f['users']['username'] ?? 'Unknown';
@@ -48,7 +48,7 @@ try {
     }, $filmsRaw);
 
 
-    // Pick a featured film (random or first)
+  
     $featuredFilm = !empty($films) ? $films[0] : null;
 
 } catch (Exception $e) {
@@ -119,16 +119,16 @@ $thumbnail_map = [
             <section class="hero">
                 <div class="hero-video-container">
                     <img id="hero-cover"
-                        src="<?= htmlspecialchars($featuredFilm['poster_url'] ?: '/images/circles_cover.png') ?>"
+                        src="<?= htmlspecialchars($featuredFilm['poster_url'] ?: '/public/images/circles_cover.png') ?>"
                         alt="Cover" style="opacity: 0; transition: opacity 1s;">
 
-                    <!-- Video - Always show hero video as background -->
+                    
                     <video id="hero-video" muted playsinline loop autoplay preload="auto" style="opacity: 1; transition: opacity 1s;" webkit-playsinline>
                         <source src="https://qqwwtartsqtxyoirsiio.supabase.co/storage/v1/object/public/uploads/static_videos/thunderbolts_trailer.mp4" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
                     <script>
-                        // Immediate attempt to play video
+                        
                         (function() {
                             const video = document.getElementById('hero-video');
                             if (video) {
@@ -139,7 +139,8 @@ $thumbnail_map = [
                         })();
                     </script>
                     <?php if ($featuredFilm['trailer_url']): ?>
-                        <!-- Optional: Featured film trailer can overlay or be shown in carousel -->
+                       
+                        
                     <?php endif; ?>
                 </div>
 
@@ -174,21 +175,22 @@ $thumbnail_map = [
                 </div>
             </section>
         <?php else: ?>
-            <!-- Default Carousel when no films -->
+          
+            
             <section class="hero">
                 <div class="hero-video-container">
-                    <!-- Default Cover Image (Hidden, video plays immediately) -->
+                   
                     <img id="hero-cover"
-                        src="/images/circles_cover.png"
+                        src="/public/images/circles_cover.png"
                         alt="Cover" style="opacity: 0; transition: opacity 1s;">
                     
-                    <!-- Default Video - Always playing -->
+                    
                     <video id="hero-video" muted playsinline loop autoplay preload="auto" style="opacity: 1; transition: opacity 1s;" webkit-playsinline>
                         <source src="https://qqwwtartsqtxyoirsiio.supabase.co/storage/v1/object/public/uploads/static_videos/thunderbolts_trailer.mp4" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
                     <script>
-                        // Immediate attempt to play video
+                       
                         (function() {
                             const video = document.getElementById('hero-video');
                             if (video) {
@@ -223,7 +225,7 @@ $thumbnail_map = [
             </section>
         <?php endif; ?>
 
-        <!-- Featured Trailers Carousel -->
+        
         <section class="carousel-section" id="featured-trailers">
             <div class="section-header">
                 Featured Trailers <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"
@@ -233,20 +235,20 @@ $thumbnail_map = [
             </div>
 
             <div class="scroll-container">
-                <!-- Default trailer cards using assets -->
+               
                 <div class="card" style="cursor: pointer;" onclick="document.getElementById('hero-video')?.play()">
-                    <img src="/images/circles_cover.png" alt="Featured Trailer" class="card-img">
+                    <img src="/public/images/circles_cover.png" alt="Featured Trailer" class="card-img">
                     <div class="card-overlay">
                         <div class="card-title">Featured Content</div>
                         <div class="card-subtitle">TetteyStudios+ Original</div>
                     </div>
                 </div>
-                
-                <!-- Show approved films if available -->
+
+              
                 <?php foreach ($films as $film): ?>
                     <div class="card" onclick="window.location.href='watch.php?id=<?= $film['id'] ?>'">
                         <?php
-                        $img_url = $thumbnail_map[$film['title']] ?? $film['thumbnail_url'] ?? $film['poster_url'] ?? '/images/circles_cover.png';
+                        $img_url = $thumbnail_map[$film['title']] ?? $film['thumbnail_url'] ?? $film['poster_url'] ?? '/public/images/circles_cover.png';
                         ?>
                         <img src="<?= htmlspecialchars($img_url) ?>"
                             alt="<?= htmlspecialchars($film['title']) ?>" class="card-img">
@@ -261,7 +263,7 @@ $thumbnail_map = [
             </div>
         </section>
 
-        <!-- Available Films Section -->
+     
         <section class="carousel-section" id="films">
             <div class="section-header">
                 Available Films <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"
@@ -275,7 +277,7 @@ $thumbnail_map = [
                     <?php foreach ($films as $film): ?>
                         <div class="card" onclick="window.location.href='watch.php?id=<?= $film['id'] ?>'">
                             <?php
-                            $img_url = $thumbnail_map[$film['title']] ?? $film['thumbnail_url'] ?? $film['poster_url'] ?? '/images/circles_cover.png';
+                            $img_url = $thumbnail_map[$film['title']] ?? $film['thumbnail_url'] ?? $film['poster_url'] ?? '/public/images/circles_cover.png';
                             ?>
                             <img src="<?= htmlspecialchars($img_url) ?>"
                                 alt="<?= htmlspecialchars($film['title']) ?>" class="card-img">
@@ -295,20 +297,20 @@ $thumbnail_map = [
             </div>
         </section>
 
-        <!-- Mock Content Below -->
+        
         <section class="carousel-section">
             <div class="section-header">
                 Top Charts
             </div>
             <div class="scroll-container">
                 <div class="card" style="width: 200px; height: 300px; min-width: 200px;">
-                    <img src="/images/circles_cover.png" alt="Top Chart 1" class="card-img">
+                    <img src="/public/images/circles_cover.png" alt="Top Chart 1" class="card-img">
                 </div>
                 <div class="card" style="width: 200px; height: 300px; min-width: 200px;">
-                    <img src="/images/circles_cover.png" alt="Top Chart 2" class="card-img">
+                    <img src="/public/images/circles_cover.png" alt="Top Chart 2" class="card-img">
                 </div>
                 <div class="card" style="width: 200px; height: 300px; min-width: 200px;">
-                    <img src="/images/circles_cover.png" alt="Top Chart 3" class="card-img">
+                    <img src="/public/images/circles_cover.png" alt="Top Chart 3" class="card-img">
                 </div>
             </div>
         </section>

@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $result = register($username, $email, $password, $role);
         if ($result['success']) {
             $success = $result['message'];
-            // Auto login after registration
+            
             $user = $GLOBALS['supabase']->request('GET', 'users', [
                 'select' => '*,user_profiles(role)',
                 'username' => "eq.$username"
@@ -34,7 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['username'] = $user['username'];
                 $profile = $user['user_profiles'][0] ?? [];
                 $_SESSION['role'] = $profile['role'] ?? 'viewer';
-                // Redirect to dashboard
+                
+                
                 if ($_SESSION['role'] === 'filmmaker') {
                     header('Location: filmmaker_dashboard.php');
                 } else {

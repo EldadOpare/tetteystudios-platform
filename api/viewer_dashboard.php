@@ -3,14 +3,20 @@ require_once __DIR__ . '/src/session_init.php';
 require_once __DIR__ . '/src/auth.php';
 requireLogin();
 if ($_SESSION['role'] === 'viewer') {
-    // OK
-} elseif ($_SESSION['role'] === 'admin') {
+   
+} 
+
+elseif ($_SESSION['role'] === 'admin') {
     header('Location: /admin_dashboard.php');
     exit;
-} elseif ($_SESSION['role'] === 'filmmaker') {
+} 
+
+elseif ($_SESSION['role'] === 'filmmaker') {
     header('Location: /filmmaker_dashboard.php');
     exit;
-} else {
+}
+
+else {
     session_destroy();
     header('Location: /login.php');
     exit;
@@ -36,7 +42,7 @@ if ($_SESSION['role'] === 'viewer') {
     </header>
 
     <main class="main-content">
-        <!-- Section with Default Carousel -->
+        
         <section class="hero" style="margin-top: 0;">
             <div class="hero-video-container">
                 <img id="hero-cover" src="/public/images/circles_cover.png" alt="Cover"
@@ -56,11 +62,11 @@ if ($_SESSION['role'] === 'viewer') {
                         const video = document.getElementById('hero-video');
 
                         if (video) {
-                            // Start with first video
+                           
                             video.src = playlist[currentIndex];
                             video.muted = true;
 
-                            // Play next when current video ends
+                            
                             video.addEventListener('ended', () => {
                                 currentIndex = (currentIndex + 1) % playlist.length;
                                 video.src = playlist[currentIndex];
@@ -91,7 +97,8 @@ if ($_SESSION['role'] === 'viewer') {
         </section>
 
         <?php
-        // Fetch approved films for carousel
+       
+       
         try {
             $approvedFilms = $supabase->request('GET', 'films', [
                 'select' => '*,categories(name),users(username)',
@@ -111,7 +118,7 @@ if ($_SESSION['role'] === 'viewer') {
         }
         ?>
 
-        <!-- Featured Trailers Carousel -->
+       
         <section class="carousel-section">
             <div class="section-header">
                 Featured Trailers <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"
@@ -140,7 +147,7 @@ if ($_SESSION['role'] === 'viewer') {
             </div>
         </section>
 
-        <!-- Available Films -->
+       
         <section class="carousel-section">
             <div class="section-header">
                 Available Films <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"

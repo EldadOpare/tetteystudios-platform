@@ -26,9 +26,8 @@ class Supabase
         return $headers;
     }
 
-    /**
-     * Upload a file to Supabase Storage
-     */
+
+    
     public function uploadFile($bucket, $filename, $filePath, $contentType)
     {
         $url = $this->url . '/storage/v1/object/' . $bucket . '/' . $filename;
@@ -60,9 +59,8 @@ class Supabase
         return $this->url . '/storage/v1/object/public/' . $bucket . '/' . $filename;
     }
 
-    /**
-     * Make a request to Supabase API
-     */
+
+    
     public function request($method, $endpoint, $data = [], $headers = [])
     {
         $url = $this->url . '/rest/v1/' . $endpoint;
@@ -73,7 +71,7 @@ class Supabase
             'apikey: ' . $this->key,
             'Authorization: Bearer ' . $this->key,
             'Content-Type: application/json',
-            'Prefer: return=representation' // Return the inserted/updated data
+            'Prefer: return=representation' 
         ];
 
         // Merge headers

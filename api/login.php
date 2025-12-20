@@ -3,21 +3,27 @@ require_once __DIR__ . '/src/session_init.php';
 require_once __DIR__ . '/src/auth.php';
 
 if (isLoggedIn()) {
-    // Redirect to correct dashboard if already logged in
+    
     $role = $_SESSION['role'] ?? null;
     if ($role === 'filmmaker') {
         header('Location: /filmmaker_dashboard.php');
         exit;
-    } elseif ($role === 'admin') {
+    }
+    
+    elseif ($role === 'admin') {
         header('Location: /admin_dashboard.php');
         exit;
-    } elseif ($role === 'viewer') {
+    }
+    
+    elseif ($role === 'viewer') {
         header('Location: /viewer_dashboard.php');
         exit;
-    } else {
-        // Invalid session, destroy and show login
+    }
+    
+    else {
+       
         session_destroy();
-        // Prevent redirect loop: only redirect if not already on login.php
+        
         if (basename($_SERVER['PHP_SELF']) !== 'login.php') {
             header('Location: /login.php');
         }
@@ -30,8 +36,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'] ?? '';
     $password = $_POST['password'] ?? '';
 
-    // Simple Regex Validation:
-    // Username must be alphanumeric (letters, numbers, underscore), 3-20 characters
+
+    
+
     if (!preg_match('/^[a-zA-Z0-9_]{3,20}$/', $username)) {
         $error = "Invalid username format. Use letters, numbers, and underscores only.";
     } else {
@@ -48,9 +55,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 header('Location: /viewer_dashboard.php');
                 exit;
             } else {
-                // Invalid session, destroy and show login
+               
                 session_destroy();
-                // Prevent redirect loop: only redirect if not already on login.php
+               
+                
                 if (basename($_SERVER['PHP_SELF']) !== 'login.php') {
                     header('Location: /login.php');
                 }

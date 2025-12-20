@@ -2,16 +2,23 @@
 require_once __DIR__ . '/src/session_init.php';
 require_once __DIR__ . '/src/auth.php';
 requireLogin();
-// Only allow filmmakers
+
+
 if ($_SESSION['role'] === 'filmmaker') {
-    // OK
-} elseif ($_SESSION['role'] === 'admin') {
+   
+} 
+
+elseif ($_SESSION['role'] === 'admin') {
     header('Location: /admin_dashboard.php');
     exit;
-} elseif ($_SESSION['role'] === 'viewer') {
+} 
+
+elseif ($_SESSION['role'] === 'viewer') {
     header('Location: /viewer_dashboard.php');
     exit;
-} else {
+} 
+
+else {
     session_destroy();
     header('Location: /login.php');
     exit;
@@ -37,7 +44,8 @@ if ($_SESSION['role'] === 'filmmaker') {
 
 
     <main class="main-content">
-        <!-- Section with Playing Video -->
+      
+    
         <section class="hero" style="margin-top: 0;">
             <div class="hero-video-container">
                 <img id="hero-cover" src="/public/images/circles_cover.png" alt="Cover"
@@ -91,19 +99,20 @@ if ($_SESSION['role'] === 'filmmaker') {
             </div>
         </section>
 
-        <!-- SECTION 1: My Projects (Enhanced) -->
+      
         <div style="padding: 40px; background: #0a0a0a; border-bottom: 1px solid #222;">
             <h2 style="font-weight: 300; margin-bottom: 30px; font-size: 28px;">My Projects</h2>
 
             <div class="grid-container"
                 style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px;">
                 <?php
-                // Fetch my films with stats
+                
+                
                 $myFilms = $supabase->request('GET', 'films', [
                     'filmmaker_id' => 'eq.' . $_SESSION['user_id'],
                     'order' => 'created_at.desc'
                 ]);
-                //Check if the $myFilms array is empty (meaning the user has no uploads)
+              
                 if (empty($myFilms)):
                     ?>
                     <div
@@ -114,7 +123,7 @@ if ($_SESSION['role'] === 'filmmaker') {
                 <?php else:
                     foreach ($myFilms as $film):
                         
-                        //Calculate the percentage of funding raised
+                       
                         $percent = ($film['funding_goal'] > 0) ? min(100, round(($film['funding_raised'] / $film['funding_goal']) * 100)) : 0;
                         ?>
                         <div class="card" style="height: auto; cursor: default; background: #111; border: 1px solid #333;">
@@ -161,7 +170,7 @@ if ($_SESSION['role'] === 'filmmaker') {
 
         
         <?php
-        // Fetch approved films for carousel (Discovery)
+        
         try {
             $approvedFilms = $supabase->request('GET', 'films', [
                 'select' => '*,categories(name),users(username)',

@@ -3,7 +3,7 @@ require_once __DIR__ . '/Supabase.php';
 
 // Set Supabase URL and Key from environment variables
 $supabaseUrl = getenv('SUPABASE_URL');
-// Try both variable names for backwards compatibility
+
 $supabaseKey = getenv('SUPABASE_ANON_KEY') ?: getenv('SUPABASE_KEY');
 
 // Validate Supabase credentials
@@ -12,7 +12,7 @@ if (empty($supabaseUrl) || empty($supabaseKey)) {
 }
 
 try {
-    // Initialize Supabase
+  
     $supabase = new Supabase($supabaseUrl, $supabaseKey);
 
 } catch (Exception $e) {

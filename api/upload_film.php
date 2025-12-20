@@ -3,7 +3,7 @@ require_once __DIR__ . '/src/session_init.php';
 require_once __DIR__ . '/src/auth.php';
 requireLogin();
 
-// Ensure only filmmakers/admins can upload
+
 if ($_SESSION['role'] !== 'filmmaker' && $_SESSION['role'] !== 'admin') {
     die("Unauthorized access.");
 }
@@ -11,7 +11,7 @@ if ($_SESSION['role'] !== 'filmmaker' && $_SESSION['role'] !== 'admin') {
 $error = '';
 $success = '';
 
-// Handle Form Submission
+
 $title = '';
 $synopsis = '';
 $category_id = null;
@@ -27,12 +27,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $video_url_link = trim($_POST['video_url_link'] ?? '');
     $trailer_url_link = trim($_POST['trailer_url_link'] ?? '');
 
-    // Validate URLs are provided
+ 
     if (empty($video_url_link)) {
         $error = "Please provide a video URL link.";
-    } elseif (empty($trailer_url_link)) {
+    } 
+    
+    elseif (empty($trailer_url_link)) {
         $error = "Please provide a trailer URL link.";
-    } else {
+    }
+    
+    else {
         try {
             $uploadDir = __DIR__ . '/uploads/';
             if (!is_dir($uploadDir))
@@ -40,35 +44,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             function handleUpload($fileKey, $maxSizeMB = 100)
             {
-                global $supabase; // Access global Supabase instance
+                global $supabase; 
 
-                // Check if the file actually exists and has no errors
+               
                 if (!isset($_FILES[$fileKey]) || $_FILES[$fileKey]['error'] !== UPLOAD_ERR_OK) {
                     return null;
                 }
 
-                // If the file is bigger than 100MB, reject it
+               
                 $fileSize = $_FILES[$fileKey]['size'];
-                $maxSizeBytes = $maxSizeMB * 1024 * 1024; // Convert MB to bytes
+                $maxSizeBytes = $maxSizeMB * 1024 * 1024; 
 
                 if ($fileSize > $maxSizeBytes) {
                     throw new Exception("File size exceeds maximum allowed size of {$maxSizeMB}MB.");
                 }
 
-                // Simple MIME check (optional but recommended)
+               
                 $finfo = new finfo(FILEINFO_MIME_TYPE);
                 $mimeType = $finfo->file($_FILES[$fileKey]['tmp_name']);
                 if (strpos($mimeType, 'image/') !== 0) {
                     throw new Exception("Only image files are allowed.");
                 }
 
-                // Give the file a random unique name
+              
                 $ext = pathinfo($_FILES[$fileKey]['name'], PATHINFO_EXTENSION);
                 $filename = uniqid($fileKey . '_') . '.' . $ext;
 
-                // Upload to Supabase Storage 'uploads' bucket
+               
                 try {
-                    // Note: You must create a PUBLIC bucket named 'uploads' in your Supabase project first
+                    
                     return $supabase->uploadFile('uploads', $filename, $_FILES[$fileKey]['tmp_name'], $mimeType);
                 } catch (Exception $e) {
                     throw new Exception("Storage Error: " . $e->getMessage());
@@ -95,8 +99,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'duration_minutes' => $duration,
                     'funding_goal' => $funding_goal,
                     'poster_url' => $posterUrl,
-                    'video_url' => $video_url_link, // External video URL
-                    'trailer_url' => $trailer_url_link, // External trailer URL
+                    'video_url' => $video_url_link, 
+                    'trailer_url' => $trailer_url_link, 
                     'thumbnail_url' => $thumbnailUrl,
                     'status' => 'pending'
                     // created_at is default
@@ -107,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
                 $filmId = $response[0]['id'];
 
-                // Handle Credits
+                
                 $credits = [
                     ['role' => 'Director', 'name' => $_POST['director_name'] ?? ''],
                     ['role' => 'Writer', 'name' => $_POST['writer_name'] ?? ''],
@@ -124,7 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                 }
 
-                // Redirect immediately after success, no output before this
+                
                 header("Location: filmmaker_dashboard.php");
                 exit;
             } catch (Exception $uploadError) {
@@ -137,7 +141,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 
-// Fetch Categories for Dropdown
+
 try {
     $cats = $supabase->request('GET', 'categories');
 } catch (Exception $e) {
