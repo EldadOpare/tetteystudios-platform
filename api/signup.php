@@ -23,8 +23,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $result = register($username, $email, $password, $role);
         if ($result['success']) {
             $success = $result['message'];
-            // Auto login or redirect to login
-            header('refresh:2;url=login.php');
+            // Auto login after registration
+            $user = $GLOBALS['supabase']->request('GET', 'users', [
+                'select' => '*,user_profiles(role)',
+                'username' => "eq.$username"
+            ]);
+            if (!empty($user)) {
+                $user = $user[0];
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['username'] = $user['username'];
+                $profile = $user['user_profiles'][0] ?? [];
+                $_SESSION['role'] = $profile['role'] ?? 'viewer';
+                // Redirect to dashboard
+                if ($_SESSION['role'] === 'filmmaker') {
+                    header('Location: filmmaker_dashboard.php');
+                } else {
+                    header('Location: viewer_dashboard.php');
+                }
+                exit;
+            }
         } else {
             $error = $result['message'];
         }

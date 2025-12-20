@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once __DIR__ . '/src/auth.php';
 
 // Prepare Filters
@@ -245,7 +246,7 @@ $thumbnail_map = [
                 <?php foreach ($films as $film): ?>
                     <div class="card" onclick="window.location.href='watch.php?id=<?= $film['id'] ?>'">
                         <?php
-                        $img_url = $film['thumbnail_url'] ?: $film['poster_url'] ?: ($thumbnail_map[$film['title']] ?? '/images/circles_cover.png');
+                        $img_url = $thumbnail_map[$film['title']] ?? $film['thumbnail_url'] ?? $film['poster_url'] ?? '/images/circles_cover.png';
                         ?>
                         <img src="<?= htmlspecialchars($img_url) ?>"
                             alt="<?= htmlspecialchars($film['title']) ?>" class="card-img">
