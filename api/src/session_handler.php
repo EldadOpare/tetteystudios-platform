@@ -49,32 +49,35 @@ class SupabaseSessionHandler implements SessionHandlerInterface
     public function write($id, $data): bool
     {
         try {
+            // Don't write empty sessions
+            if (empty($data)) {
+                return true;
+            }
+
             $encodedData = base64_encode($data);
             $now = date('Y-m-d H:i:s');
 
-            // Try to update first
-            $existing = $this->supabase->request('GET', 'sessions', [
-                'session_id' => "eq.$id"
-            ]);
-
-            if (!empty($existing)) {
-                // Update existing session
-                $this->supabase->request('PATCH', "sessions?session_id=eq.$id", [
-                    'data' => $encodedData,
-                    'last_activity' => $now
-                ]);
-            } else {
-                // Insert new session
+            // Try to insert or update using upsert pattern
+            try {
+                // First try to insert
                 $this->supabase->request('POST', 'sessions', [
                     'session_id' => $id,
                     'data' => $encodedData,
                     'last_activity' => $now
                 ]);
+            } catch (Exception $e) {
+                // If insert fails (duplicate key), try update
+                $this->supabase->request('PATCH', "sessions?session_id=eq.$id", [
+                    'data' => $encodedData,
+                    'last_activity' => $now
+                ]);
             }
+
             return true;
         } catch (Exception $e) {
-            error_log("Session write error: " . $e->getMessage());
-            return false;
+            error_log("Session write error for ID $id: " . $e->getMessage());
+            // Return true anyway to prevent session write failures from breaking the app
+            return true;
         }
     }
 
