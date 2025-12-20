@@ -10,7 +10,7 @@ function isLoggedIn()
 function requireLogin()
 {
     if (!isLoggedIn()) {
-        header('Location: /api/login.php');
+        header('Location: /login.php');
         exit;
     }
 }
