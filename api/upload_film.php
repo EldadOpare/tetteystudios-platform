@@ -85,7 +85,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
 
                 // Supabase Insert - video_url now stores the external link
-                $response = $supabase->request('POST', 'films', [
+                // Use service instance to bypass RLS for authorized filmmaker uploads
+                $response = $supabaseService->request('POST', 'films', [
                     'filmmaker_id' => $_SESSION['user_id'],
                     'title' => $title,
                     'synopsis' => $synopsis,
@@ -93,8 +94,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'duration_minutes' => $duration,
                     'funding_goal' => $funding_goal,
                     'poster_url' => $posterUrl,
-                    'video_url' => $video_url_link, 
-                    'trailer_url' => $trailer_url_link, 
+                    'video_url' => $video_url_link,
+                    'trailer_url' => $trailer_url_link,
                     'thumbnail_url' => $thumbnailUrl,
                     'status' => 'pending'
                     // created_at is default
@@ -114,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 foreach ($credits as $credit) {
                     if (!empty($credit['name'])) {
-                        $supabase->request('POST', 'film_credits', [
+                        $supabaseService->request('POST', 'film_credits', [
                             'film_id' => $filmId,
                             'role' => $credit['role'],
                             'name' => $credit['name']
