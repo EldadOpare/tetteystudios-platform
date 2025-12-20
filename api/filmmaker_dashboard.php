@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once __DIR__ . '/src/auth.php';
 requireLogin();
 //check if the user is a filmmaker or admin
