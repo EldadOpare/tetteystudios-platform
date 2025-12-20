@@ -11,7 +11,6 @@ $error = '';
 $success = '';
 
 // Handle Form Submission
-// Handle Form Submission
 $title = '';
 $synopsis = '';
 $category_id = null;
@@ -85,51 +84,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (!$thumbnailUrl) {
                     $thumbnailUrl = '/images/circles_cover.png';
                 }
+
+                // Supabase Insert - video_url now stores the external link
+                $response = $supabase->request('POST', 'films', [
+                    'filmmaker_id' => $_SESSION['user_id'],
+                    'title' => $title,
+                    'synopsis' => $synopsis,
+                    'category_id' => $category_id,
+                    'duration_minutes' => $duration,
+                    'funding_goal' => $funding_goal,
+                    'poster_url' => $posterUrl,
+                    'video_url' => $video_url_link, // External video URL
+                    'trailer_url' => $trailer_url_link, // External trailer URL
+                    'thumbnail_url' => $thumbnailUrl,
+                    'status' => 'pending'
+                    // created_at is default
+                ]);
+
+                if (empty($response) || !isset($response[0]['id'])) {
+                    throw new Exception("Failed to create film record.");
+                }
+                $filmId = $response[0]['id'];
+
+                // Handle Credits
+                $credits = [
+                    ['role' => 'Director', 'name' => $_POST['director_name'] ?? ''],
+                    ['role' => 'Writer', 'name' => $_POST['writer_name'] ?? ''],
+                    ['role' => 'Producer', 'name' => $_POST['producer_name'] ?? '']
+                ];
+
+                foreach ($credits as $credit) {
+                    if (!empty($credit['name'])) {
+                        $supabase->request('POST', 'film_credits', [
+                            'film_id' => $filmId,
+                            'role' => $credit['role'],
+                            'name' => $credit['name']
+                        ]);
+                    }
+                }
+
+                // Redirect immediately after success, no output before this
+                header("Location: filmmaker_dashboard.php");
+                exit;
             } catch (Exception $uploadError) {
                 throw new Exception("Upload error: " . $uploadError->getMessage());
             }
-
-            // Supabase Insert - video_url now stores the external link
-            $response = $supabase->request('POST', 'films', [
-                'filmmaker_id' => $_SESSION['user_id'],
-                'title' => $title,
-                'synopsis' => $synopsis,
-                'category_id' => $category_id,
-                'duration_minutes' => $duration,
-                'funding_goal' => $funding_goal,
-                'poster_url' => $posterUrl,
-                'video_url' => $video_url_link, // External video URL
-                'trailer_url' => $trailer_url_link, // External trailer URL
-                'thumbnail_url' => $thumbnailUrl,
-                'status' => 'pending'
-                // created_at is default
-            ]);
-
-            if (empty($response) || !isset($response[0]['id'])) {
-                throw new Exception("Failed to create film record.");
-            }
-            $filmId = $response[0]['id'];
-
-            // Handle Credits
-            $credits = [
-                ['role' => 'Director', 'name' => $_POST['director_name'] ?? ''],
-                ['role' => 'Writer', 'name' => $_POST['writer_name'] ?? ''],
-                ['role' => 'Producer', 'name' => $_POST['producer_name'] ?? '']
-            ];
-
-            foreach ($credits as $credit) {
-                if (!empty($credit['name'])) {
-                    $supabase->request('POST', 'film_credits', [
-                        'film_id' => $filmId,
-                        'role' => $credit['role'],
-                        'name' => $credit['name']
-                    ]);
-                }
-            }
-
-            $success = "Film uploaded successfully! It is now pending approval.";
-            header("Location: filmmaker_dashboard.php");
-            exit;
         } catch (Exception $e) {
             $error = "Upload failed: " . $e->getMessage();
         }
