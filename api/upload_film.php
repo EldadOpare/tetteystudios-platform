@@ -38,13 +38,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     else {
         try {
-            $uploadDir = __DIR__ . '/uploads/';
+            // Use /tmp for Vercel's serverless environment
+            $uploadDir = '/tmp/uploads/';
             if (!is_dir($uploadDir))
                 mkdir($uploadDir, 0777, true);
 
             function handleUpload($fileKey, $maxSizeMB = 100)
             {
-                global $supabaseService;
+                global $supabase;
 
                 if (!isset($_FILES[$fileKey]) || $_FILES[$fileKey]['error'] !== UPLOAD_ERR_OK) {
                     return null;
@@ -67,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $filename = uniqid($fileKey . '_') . '.' . $ext;
 
                 try {
-                    return $supabaseService->uploadFile('uploads', $filename, $_FILES[$fileKey]['tmp_name'], $mimeType);
+                    return $supabase->uploadFile('uploads', $filename, $_FILES[$fileKey]['tmp_name'], $mimeType);
                 } catch (Exception $e) {
                     throw new Exception("Storage Error: " . $e->getMessage());
                 }
@@ -85,8 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
 
                 // Supabase Insert - video_url now stores the external link
-                // Use service instance to bypass RLS for authorized filmmaker uploads
-                $response = $supabaseService->request('POST', 'films', [
+                $response = $supabase->request('POST', 'films', [
                     'filmmaker_id' => $_SESSION['user_id'],
                     'title' => $title,
                     'synopsis' => $synopsis,
@@ -115,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 foreach ($credits as $credit) {
                     if (!empty($credit['name'])) {
-                        $supabaseService->request('POST', 'film_credits', [
+                        $supabase->request('POST', 'film_credits', [
                             'film_id' => $filmId,
                             'role' => $credit['role'],
                             'name' => $credit['name']
