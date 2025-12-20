@@ -27,7 +27,7 @@ class Supabase
     }
 
 
-    
+
     public function uploadFile($bucket, $filename, $filePath, $contentType)
     {
         $url = $this->url . '/storage/v1/object/' . $bucket . '/' . $filename;

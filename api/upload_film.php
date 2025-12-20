@@ -44,36 +44,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             function handleUpload($fileKey, $maxSizeMB = 100)
             {
-                global $supabase; 
+                global $supabaseService;
 
-               
                 if (!isset($_FILES[$fileKey]) || $_FILES[$fileKey]['error'] !== UPLOAD_ERR_OK) {
                     return null;
                 }
 
-               
                 $fileSize = $_FILES[$fileKey]['size'];
-                $maxSizeBytes = $maxSizeMB * 1024 * 1024; 
+                $maxSizeBytes = $maxSizeMB * 1024 * 1024;
 
                 if ($fileSize > $maxSizeBytes) {
                     throw new Exception("File size exceeds maximum allowed size of {$maxSizeMB}MB.");
                 }
 
-               
                 $finfo = new finfo(FILEINFO_MIME_TYPE);
                 $mimeType = $finfo->file($_FILES[$fileKey]['tmp_name']);
                 if (strpos($mimeType, 'image/') !== 0) {
                     throw new Exception("Only image files are allowed.");
                 }
 
-              
                 $ext = pathinfo($_FILES[$fileKey]['name'], PATHINFO_EXTENSION);
                 $filename = uniqid($fileKey . '_') . '.' . $ext;
 
-               
                 try {
-                    
-                    return $supabase->uploadFile('uploads', $filename, $_FILES[$fileKey]['tmp_name'], $mimeType);
+                    return $supabaseService->uploadFile('uploads', $filename, $_FILES[$fileKey]['tmp_name'], $mimeType);
                 } catch (Exception $e) {
                     throw new Exception("Storage Error: " . $e->getMessage());
                 }
