@@ -3,7 +3,15 @@ session_start();
 require_once __DIR__ . '/src/auth.php';
 
 if (isLoggedIn()) {
-    header('Location: index.php');
+    // Redirect to correct dashboard if already logged in
+    $role = $_SESSION['role'] ?? 'viewer';
+    if ($role === 'filmmaker') {
+        header('Location: filmmaker_dashboard.php');
+    } elseif ($role === 'admin') {
+        header('Location: admin_dashboard.php');
+    } else {
+        header('Location: viewer_dashboard.php');
+    }
     exit;
 }
 
