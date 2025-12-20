@@ -2,8 +2,11 @@
 session_start();
 require_once __DIR__ . '/src/auth.php';
 requireLogin();
-if ($_SESSION['role'] === 'viewer' || $_SESSION['role'] === 'admin') {
+if ($_SESSION['role'] === 'viewer') {
     // OK
+} elseif ($_SESSION['role'] === 'admin') {
+    header('Location: admin_dashboard.php');
+    exit;
 } elseif ($_SESSION['role'] === 'filmmaker') {
     header('Location: filmmaker_dashboard.php');
     exit;
@@ -143,7 +146,7 @@ if ($_SESSION['role'] === 'viewer' || $_SESSION['role'] === 'admin') {
                 Available Films <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"
                     style="opacity: 0.5;">
                     <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
-                </svg>
+                </div>
             </div>
             <div class="scroll-container">
                 <?php if (!empty($films)): ?>
