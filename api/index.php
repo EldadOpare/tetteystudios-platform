@@ -83,10 +83,11 @@ $thumbnail_map = [
 
         <!-- Search Bar -->
         <div class="search-bar-container" style="flex: 1; margin: 0 40px; display: flex; gap: 10px;">
-            <form action="index.php" method="GET" style="display: flex; width: 100%; gap: 10px;">
+            <form action="/" method="GET" style="display: flex; width: 100%; gap: 10px;">
                 <select name="category" class="form-input" style="width: 150px; padding: 8px;">
                     <option value="">All Categories</option>
-                    <?php foreach ($cats as $c): ?>
+                    <?php foreach (
+                        $cats as $c): ?>
                         <option value="<?= htmlspecialchars($c['name']) ?>" <?= $category === $c['name'] ? 'selected' : '' ?>>
                             <?= htmlspecialchars($c['name']) ?>
                         </option>
@@ -273,7 +274,7 @@ $thumbnail_map = [
                     <?php foreach ($films as $film): ?>
                         <div class="card" onclick="window.location.href='watch.php?id=<?= $film['id'] ?>'">
                             <?php
-                            $img_url = $film['thumbnail_url'] ?: $film['poster_url'] ?: ($thumbnail_map[$film['title']] ?? '/images/circles_cover.png');
+                            $img_url = $thumbnail_map[$film['title']] ?? $film['thumbnail_url'] ?? $film['poster_url'] ?? '/images/circles_cover.png';
                             ?>
                             <img src="<?= htmlspecialchars($img_url) ?>"
                                 alt="<?= htmlspecialchars($film['title']) ?>" class="card-img">
@@ -300,19 +301,13 @@ $thumbnail_map = [
             </div>
             <div class="scroll-container">
                 <div class="card" style="width: 200px; height: 300px; min-width: 200px;">
-                    <div
-                        style="height: 100%; width: 100%; background: #333; display: flex; align-items: center; justify-content: center; font-size: 50px; color: #555; font-weight: 800;">
-                        1</div>
+                    <img src="/images/circles_cover.png" alt="Top Chart 1" class="card-img">
                 </div>
                 <div class="card" style="width: 200px; height: 300px; min-width: 200px;">
-                    <div
-                        style="height: 100%; width: 100%; background: #333; display: flex; align-items: center; justify-content: center; font-size: 50px; color: #555; font-weight: 800;">
-                        2</div>
+                    <img src="/images/circles_cover.png" alt="Top Chart 2" class="card-img">
                 </div>
                 <div class="card" style="width: 200px; height: 300px; min-width: 200px;">
-                    <div
-                        style="height: 100%; width: 100%; background: #333; display: flex; align-items: center; justify-content: center; font-size: 50px; color: #555; font-weight: 800;">
-                        3</div>
+                    <img src="/images/circles_cover.png" alt="Top Chart 3" class="card-img">
                 </div>
             </div>
         </section>
