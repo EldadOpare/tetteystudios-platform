@@ -1,6 +1,5 @@
 <?php
 // Remove custom session directory logic for serverless compatibility
-session_start();
 require_once __DIR__ . '/db.php';
 
 function isLoggedIn()
